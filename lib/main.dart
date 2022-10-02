@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'post.dart';
 
 void main() {
   runApp(const MyApp());
@@ -65,7 +66,11 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text("掲示板デモ"),
         actions: [
           IconButton(
-              onPressed: null,
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                  return PostPage();
+                }));
+              },
               icon: Icon(Icons.edit),
           ),
         ],

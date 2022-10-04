@@ -4,13 +4,11 @@ import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PostPage extends StatefulWidget {
-
   @override
   _PostPagePageState createState() => _PostPagePageState();
 }
 
 class _PostPagePageState extends State<PostPage> {
-
   TextEditingController _textEditingController = TextEditingController();
 
   @override
@@ -22,6 +20,7 @@ class _PostPagePageState extends State<PostPage> {
       body: Center(
         child: TextField(
           controller: _textEditingController,
+          onSubmitted: _onSubmitted,
           enabled: true,
           maxLength: 50,
           style: TextStyle(color: Colors.black),
@@ -35,5 +34,12 @@ class _PostPagePageState extends State<PostPage> {
         ),
       ),
     );
+  }
+
+  _onSubmitted(String content) {
+    CollectionReference posts = FirebaseFirestore.instance.collection("posts");
+    posts.add({"content": content});
+
+    _textEditingController.clear();
   }
 }

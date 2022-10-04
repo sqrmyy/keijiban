@@ -57,7 +57,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -73,12 +72,12 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text("掲示板デモ"),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                  return PostPage();
-                }));
-              },
-              icon: Icon(Icons.edit),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                return PostPage();
+              }));
+            },
+            icon: Icon(Icons.edit),
           ),
         ],
       ),
@@ -88,18 +87,27 @@ class _MyHomePageState extends State<MyHomePage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
-          return ListView(
-            children: snapshot.data.docs.map((DocumentSnapshot document) {
+          final list = snapshot.requireData.docs
+              .map<String>((DocumentSnapshot document) {
+            final documentData = document.data()! as Map<String, dynamic>;
+            return documentData['content']! as String;
+          }).toList();
+
+          final reverseList = list.reversed.toList();
+
+          return ListView.builder(
+            itemCount: reverseList.length,
+            itemBuilder: (BuildContext context, int index) {
               return Card(
                 child: ListTile(
-                  title: Text(document.data()['content']),
+                  title: Text(reverseList[index]),
                   subtitle: Text("サブタイトル"),
                 ),
               );
-            }).toList(),
+            },
           );
         },
       ),
-      );
+    );
   }
 }
